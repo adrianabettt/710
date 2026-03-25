@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Programador que Corrige</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef2ff;
+    --panel: #ffffff;
+    --border: #c7d2fe;
+    --accent: #d97706;
+    --green: #059669;
+    --red: #dc2626;
+    --blue: #2563eb;
+    --text: #1e293b;
+    --muted: #64748b;
+    --code-bg: #1e1e2e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #0f172a;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #1e293b;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  header p {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 0.95rem;
+  }
+
+  /* ETAPAS */
+  .steps {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .step {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    text-align: center;
+    min-width: 110px;
+    transition: transform .2s;
+  }
+
+  .step:hover { transform: translateY(-2px); }
+
+  .step .icon { font-size: 1.6rem; margin-bottom: 4px; }
+  .step .label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+  }
+  .step .desc { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  /* CHALLENGES */
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .challenges { display: flex; flex-direction: column; gap: 24px; max-width: 760px; margin: 0 auto; }
+
+  .challenge-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+  }
+
+  .challenge-card:hover { box-shadow: 0 4px 24px rgba(99,102,241,.15); }
+
+  .challenge-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .challenge-num {
+    background: var(--accent);
+    color: #0f172a;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .challenge-title { font-weight: 700; font-size: 0.95rem; }
+  .challenge-context { font-size: 0.8rem; color: var(--muted); }
+
+  .challenge-body { padding: 16px 18px; }
+
+  .scenario {
+    background: #0f1a2e;
+    border-left: 3px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    color: var(--blue);
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 14px;
+    position: relative;
+  }
+
+  pre .bug { color: var(--red); background: rgba(239,68,68,.12); border-radius: 3px; padding: 0 2px; }
+  pre .comment { color: #6272a4; }
+  pre .kw { color: #ff79c6; }
+  pre .str { color: #f1fa8c; }
+  pre .num { color: #bd93f9; }
+  pre .fn { color: var(--green); }
+
+  .question {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+
+  .option {
+    background: #0f172a;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+    text-align: left;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .option:hover { border-color: var(--accent); background: rgba(245,158,11,.06); }
+  .option.correct { border-color: var(--green); background: rgba(16,185,129,.1); color: var(--green); }
+  .option.wrong { border-color: var(--red); background: rgba(239,68,68,.1); color: var(--red); }
+  .option:disabled { cursor: default; }
+
+  .option .opt-label {
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--accent);
+    min-width: 18px;
+  }
+
+  .feedback {
+    display: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .feedback.show { display: block; }
+  .feedback.ok { background: rgba(16,185,129,.12); border: 1px solid var(--green); color: var(--green); }
+  .feedback.err { background: rgba(239,68,68,.1); border: 1px solid var(--red); color: var(--red); }
+
+  /* ETAPA SELECTOR */
+  .etapa-question {
+    margin-bottom: 12px;
+  }
+
+  .etapas-opts {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .etapa-btn {
+    background: #0f172a;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text);
+    transition: border-color .15s, background .15s;
+  }
+
+  .etapa-btn:hover { border-color: var(--blue); background: rgba(56,189,248,.07); }
+  .etapa-btn.correct { border-color: var(--green); background: rgba(16,185,129,.1); color: var(--green); }
+  .etapa-btn.wrong { border-color: var(--red); background: rgba(239,68,68,.1); color: var(--red); }
+  .etapa-btn:disabled { cursor: default; }
+
+  /* SCORE */
+  .score-bar {
+    max-width: 760px;
+    margin: 32px auto 0;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .score-bar .label { font-size: 0.85rem; color: var(--muted); flex: 1; }
+
+  .score-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .reset-btn {
+    background: var(--accent);
+    color: #0f172a;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+
+  .reset-btn:hover { opacity: .85; }
+
+  .progress-wrap { flex-basis: 100%; }
+  .progress-track {
+    background: var(--border);
+    border-radius: 99px;
+    height: 8px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    height: 100%;
+    border-radius: 99px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">EF07CO02</div>
+  <h1>🐛 O Programador <span>que Corrige</span></h1>
+  <p>Encontre os erros nos programas e escolha a correção certa!</p>
+</header>
+
+<!-- ETAPAS -->
+<div class="steps">
+  <div class="step"><div class="icon">🔍</div><div class="label">Analisar</div><div class="desc">Observar o erro</div></div>
+  <div class="step"><div class="icon">💡</div><div class="label">Pensar</div><div class="desc">Imaginar solução</div></div>
+  <div class="step"><div class="icon">⚙️</div><div class="label">Testar</div><div class="desc">Alterar e executar</div></div>
+  <div class="step"><div class="icon">✅</div><div class="label">Validar</div><div class="desc">Verificar se funciona</div></div>
+</div>
+
+<div class="challenges" id="challenges">
+
+  <!-- DESAFIO 1 -->
+  <div class="challenge-card" id="c1">
+    <div class="challenge-header">
+      <div class="challenge-num">1</div>
+      <div>
+        <div class="challenge-title">O Robô que Não Para</div>
+        <div class="challenge-context">Linguagem visual em blocos (pseudocódigo)</div>
+      </div>
+    </div>
+    <div class="challenge-body">
+      <div class="scenario">📟 O robô deve andar 5 passos e parar, mas está andando para sempre!</div>
+      <pre><span class="kw">repita</span> <span class="num">5</span> <span class="kw">vezes</span>
+    robô.andar(<span class="num">1</span> passo)
+<span class="bug">fim_se</span>          <span class="comment">← algo errado aqui</span></pre>
+
+      <div class="question">🔍 Qual é o erro neste programa?</div>
+      <div class="options" id="opts1">
+        <button class="option" onclick="check(this,'opts1','A','B','fb1')"><span class="opt-label">A)</span> O número de passos está errado — deveria ser 10</button>
+        <button class="option" onclick="check(this,'opts1','B','B','fb1')"><span class="opt-label">B)</span> <code>fim_se</code> deveria ser <code>fim_repita</code> para fechar o laço corretamente</button>
+        <button class="option" onclick="check(this,'opts1','C','B','fb1')"><span class="opt-label">C)</span> Falta um segundo <code>robô.andar()</code> dentro do bloco</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+
+      <div class="etapa-question" style="margin-top:14px;">
+        <div class="question">🧩 Essa ação de "observar o que está acontecendo e identificar o erro" pertence a qual etapa?</div>
+        <div class="etapas-opts" id="etapa1">
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa1','Analisar','fte1')">Analisar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa1','Analisar','fte1')">Pensar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa1','Analisar','fte1')">Testar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa1','Analisar','fte1')">Validar</button>
+        </div>
+        <div class="feedback" id="fte1"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESAFIO 2 -->
+  <div class="challenge-card" id="c2">
+    <div class="challenge-header">
+      <div class="challenge-num">2</div>
+      <div>
+        <div class="challenge-title">A Mensagem Invertida</div>
+        <div class="challenge-context">Pseudocódigo — saída de dados</div>
+      </div>
+    </div>
+    <div class="challenge-body">
+      <div class="scenario">📟 O programa deveria mostrar "Olá, Mundo!" mas não exibe nada.</div>
+      <pre><span class="kw">inicio</span>
+    <span class="bug">entrada</span>(<span class="str">"Olá, Mundo!"</span>)   <span class="comment">← algo errado aqui</span>
+<span class="kw">fim</span></pre>
+
+      <div class="question">🔍 O que precisa ser corrigido?</div>
+      <div class="options" id="opts2">
+        <button class="option" onclick="check(this,'opts2','A','C','fb2')"><span class="opt-label">A)</span> Trocar <code>"Olá, Mundo!"</code> por <code>"Olá Mundo"</code> sem vírgula</button>
+        <button class="option" onclick="check(this,'opts2','B','C','fb2')"><span class="opt-label">B)</span> Adicionar <code>repita</code> antes do comando</button>
+        <button class="option" onclick="check(this,'opts2','C','C','fb2')"><span class="opt-label">C)</span> Trocar <code>entrada</code> por <code>saída</code>, pois queremos exibir, não receber dados</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+
+      <div class="etapa-question" style="margin-top:14px;">
+        <div class="question">🧩 "Alterar o comando e executar o programa novamente" — isso é qual etapa?</div>
+        <div class="etapas-opts" id="etapa2">
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa2','Testar','fte2')">Analisar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa2','Testar','fte2')">Pensar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa2','Testar','fte2')">Testar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa2','Testar','fte2')">Validar</button>
+        </div>
+        <div class="feedback" id="fte2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESAFIO 3 -->
+  <div class="challenge-card" id="c3">
+    <div class="challenge-header">
+      <div class="challenge-num">3</div>
+      <div>
+        <div class="challenge-title">A Conta Errada</div>
+        <div class="challenge-context">Pseudocódigo — variáveis e operadores</div>
+      </div>
+    </div>
+    <div class="challenge-body">
+      <div class="scenario">📟 O programa deve calcular a média de duas notas, mas o resultado está incorreto.</div>
+      <pre><span class="kw">nota1</span> ← <span class="num">8</span>
+<span class="kw">nota2</span> ← <span class="num">6</span>
+media ← nota1 <span class="bug">+</span> nota2   <span class="comment">← algo errado aqui</span>
+<span class="fn">saída</span>(<span class="str">"Média: "</span>, media)</pre>
+
+      <div class="question">🔍 Como corrigir o cálculo da média?</div>
+      <div class="options" id="opts3">
+        <button class="option" onclick="check(this,'opts3','A','A','fb3')"><span class="opt-label">A)</span> Trocar <code>nota1 + nota2</code> por <code>(nota1 + nota2) / 2</code></button>
+        <button class="option" onclick="check(this,'opts3','B','A','fb3')"><span class="opt-label">B)</span> Trocar <code>nota1 + nota2</code> por <code>nota1 * nota2</code></button>
+        <button class="option" onclick="check(this,'opts3','C','A','fb3')"><span class="opt-label">C)</span> Mudar o valor de <code>nota1</code> para <code>7</code></button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+
+      <div class="etapa-question" style="margin-top:14px;">
+        <div class="question">🧩 "Verificar se o programa funciona corretamente em todas as tentativas" é a etapa de…</div>
+        <div class="etapas-opts" id="etapa3">
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa3','Validar','fte3')">Analisar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa3','Validar','fte3')">Pensar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa3','Validar','fte3')">Testar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa3','Validar','fte3')">Validar</button>
+        </div>
+        <div class="feedback" id="fte3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESAFIO 4 -->
+  <div class="challenge-card" id="c4">
+    <div class="challenge-header">
+      <div class="challenge-num">4</div>
+      <div>
+        <div class="challenge-title">A Condição Esquecida</div>
+        <div class="challenge-context">Pseudocódigo — estrutura condicional</div>
+      </div>
+    </div>
+    <div class="challenge-body">
+      <div class="scenario">📟 O programa deve mostrar "Aprovado" se a nota for maior ou igual a 5, mas sempre mostra "Reprovado".</div>
+      <pre><span class="kw">se</span> nota <span class="bug">&lt;</span> <span class="num">5</span> <span class="kw">então</span>   <span class="comment">← algo errado aqui</span>
+    <span class="fn">saída</span>(<span class="str">"Aprovado"</span>)
+<span class="kw">senão</span>
+    <span class="fn">saída</span>(<span class="str">"Reprovado"</span>)
+<span class="kw">fim_se</span></pre>
+
+      <div class="question">🔍 O que está errado na condição?</div>
+      <div class="options" id="opts4">
+        <button class="option" onclick="check(this,'opts4','A','B','fb4')"><span class="opt-label">A)</span> Falta a palavra <code>então</code> no início</button>
+        <button class="option" onclick="check(this,'opts4','B','B','fb4')"><span class="opt-label">B)</span> O operador <code>&lt;</code> deveria ser <code>&gt;=</code> para verificar aprovação</button>
+        <button class="option" onclick="check(this,'opts4','C','B','fb4')"><span class="opt-label">C)</span> Deve-se remover o bloco <code>senão</code></button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+
+      <div class="etapa-question" style="margin-top:14px;">
+        <div class="question">🧩 "Imaginar uma possível solução antes de modificar o programa" é a etapa de…</div>
+        <div class="etapas-opts" id="etapa4">
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa4','Pensar','fte4')">Analisar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa4','Pensar','fte4')">Pensar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa4','Pensar','fte4')">Testar</button>
+          <button class="etapa-btn" onclick="checkEtapa(this,'etapa4','Pensar','fte4')">Validar</button>
+        </div>
+        <div class="feedback" id="fte4"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PONTUAÇÃO -->
+<div class="score-bar" id="scoreBar">
+  <div>
+    <div class="label">Pontuação</div>
+    <div class="score-display" id="scoreDisplay">0 / 8</div>
+  </div>
+  <button class="reset-btn" onclick="resetAll()">🔄 Recomeçar</button>
+  <div class="progress-wrap">
+    <div style="font-size:.78rem;color:var(--muted);">Progresso</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+</div>
+
+<script>
+const TOTAL = 8;
+let score = 0;
+let answered = 0;
+
+const FEEDBACKS = {
+  correct: [
+    "✅ Correto! Muito bem!",
+    "✅ Isso mesmo! Ótima análise!",
+    "✅ Perfeito! Você encontrou o bug!",
+    "✅ Excelente! Depuração certeira!"
+  ],
+  wrong: [
+    "❌ Não é bem isso. Tente de novo!",
+    "❌ Quase! Observe o código com calma.",
+    "❌ Errado. Releia o cenário e tente novamente.",
+    "❌ Não está certo. Pense em cada parte do código."
+  ]
+};
+
+function rnd(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+function check(btn, groupId, chosen, correct, fbId) {
+  const btns = document.querySelectorAll(`#${groupId} .option`);
+  btns.forEach(b => b.disabled = true);
+  const fb = document.getElementById(fbId);
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    fb.textContent = rnd(FEEDBACKS.correct);
+    fb.className = 'feedback show ok';
+    score++;
+    answered++;
+  } else {
+    btn.classList.add('wrong');
+    // highlight correct
+    btns.forEach(b => {
+      if (b.querySelector('.opt-label').textContent.startsWith(correct)) b.classList.add('correct');
+    });
+    fb.textContent = rnd(FEEDBACKS.wrong);
+    fb.className = 'feedback show err';
+    answered++;
+  }
+  updateScore();
+}
+
+function checkEtapa(btn, groupId, correct, fbId) {
+  const btns = document.querySelectorAll(`#${groupId} .etapa-btn`);
+  btns.forEach(b => b.disabled = true);
+  const fb = document.getElementById(fbId);
+  if (btn.textContent.trim() === correct) {
+    btn.classList.add('correct');
+    fb.textContent = `✅ Correto! Essa é a etapa "${correct}".`;
+    fb.className = 'feedback show ok';
+    score++;
+    answered++;
+  } else {
+    btn.classList.add('wrong');
+    btns.forEach(b => { if (b.textContent.trim() === correct) b.classList.add('correct'); });
+    fb.textContent = `❌ Não! A etapa correta é "${correct}". Continue tentando!`;
+    fb.className = 'feedback show err';
+    answered++;
+  }
+  updateScore();
+}
+
+function updateScore() {
+  document.getElementById('scoreDisplay').textContent = `${score} / ${TOTAL}`;
+  document.getElementById('progressFill').style.width = `${(answered/TOTAL)*100}%`;
+}
+
+function resetAll() {
+  score = 0; answered = 0;
+  updateScore();
+  // reset options
+  document.querySelectorAll('.option').forEach(b => {
+    b.disabled = false;
+    b.className = 'option';
+  });
+  document.querySelectorAll('.etapa-btn').forEach(b => {
+    b.disabled = false;
+    b.className = 'etapa-btn';
+  });
+  document.querySelectorAll('.feedback').forEach(f => {
+    f.className = 'feedback';
+    f.textContent = '';
+  });
+}
+</script>
+</body>
+</html>
