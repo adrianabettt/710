@@ -128,7 +128,7 @@
 
   .challenge-num {
     background: var(--accent);
-    color: #0f172a;
+    color: #ffffff;
     font-family: 'Space Mono', monospace;
     font-weight: 700;
     font-size: 0.85rem;
@@ -138,25 +138,25 @@
     flex-shrink: 0;
   }
 
-  .challenge-title { font-weight: 700; font-size: 0.95rem; }
+  .challenge-title { font-weight: 700; font-size: 0.95rem; color: #1e293b; }
   .challenge-context { font-size: 0.8rem; color: var(--muted); }
 
   .challenge-body { padding: 16px 18px; }
 
   .scenario {
-    background: #0f1a2e;
+    background: #eff6ff;
     border-left: 3px solid var(--blue);
     border-radius: 0 8px 8px 0;
     padding: 10px 14px;
     font-size: 0.88rem;
-    color: var(--blue);
+    color: #1d4ed8;
     margin-bottom: 14px;
     font-style: italic;
   }
 
   pre {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
     border-radius: 10px;
     padding: 14px 16px;
     font-family: 'Space Mono', monospace;
@@ -165,19 +165,20 @@
     overflow-x: auto;
     margin-bottom: 14px;
     position: relative;
+    color: #1e293b;
   }
 
-  pre .bug { color: var(--red); background: rgba(239,68,68,.12); border-radius: 3px; padding: 0 2px; }
-  pre .comment { color: #6272a4; }
-  pre .kw { color: #ff79c6; }
-  pre .str { color: #f1fa8c; }
-  pre .num { color: #bd93f9; }
-  pre .fn { color: var(--green); }
+  pre .bug { color: #b91c1c; background: rgba(220,38,38,.1); border-radius: 3px; padding: 0 2px; font-weight: 700; }
+  pre .comment { color: #6366f1; }
+  pre .kw { color: #7c3aed; font-weight: 700; }
+  pre .str { color: #0369a1; }
+  pre .num { color: #b45309; }
+  pre .fn { color: #047857; font-weight: 700; }
 
   .question {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #fff;
+    color: #1e293b;
     margin-bottom: 10px;
   }
 
@@ -185,7 +186,7 @@
   .options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
 
   .option {
-    background: #0f172a;
+    background: #f8faff;
     border: 2px solid var(--border);
     border-radius: 10px;
     padding: 10px 14px;
@@ -238,7 +239,7 @@
   }
 
   .etapa-btn {
-    background: #0f172a;
+    background: #f8faff;
     border: 2px solid var(--border);
     border-radius: 8px;
     padding: 8px 14px;
@@ -280,7 +281,7 @@
 
   .reset-btn {
     background: var(--accent);
-    color: #0f172a;
+    color: #ffffff;
     border: none;
     border-radius: 10px;
     padding: 10px 20px;
@@ -481,7 +482,7 @@ media ← nota1 <span class="bug">+</span> nota2   <span class="comment">← alg
 <div class="score-bar" id="scoreBar">
   <div>
     <div class="label">Pontuação</div>
-    <div class="score-display" id="scoreDisplay">0 / 8</div>
+    <div class="score-display" id="scoreDisplay">0 / 10</div>
   </div>
   <button class="reset-btn" onclick="resetAll()">🔄 Recomeçar</button>
   <div class="progress-wrap">
@@ -556,7 +557,9 @@ function checkEtapa(btn, groupId, correct, fbId) {
 }
 
 function updateScore() {
-  document.getElementById('scoreDisplay').textContent = `${score} / ${TOTAL}`;
+  // Converte pontuação para escala de 0 a 10
+  const nota = parseFloat(((score / TOTAL) * 10).toFixed(1));
+  document.getElementById('scoreDisplay').textContent = `${nota} / 10`;
   document.getElementById('progressFill').style.width = `${(answered/TOTAL)*100}%`;
 }
 
